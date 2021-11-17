@@ -1,0 +1,19 @@
+{
+  "name": "atlan-challenge",
+  "version": "1.0.0",
+  "description": "Challenge stage of the Backend Internship application process at Atlan.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thedevyansh/Atlan-Challenge.git"
+  },
+  "author": "Devyansh Chawla",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thedevyansh/Atlan-Challenge/issues"
+  },
+  "homepage": "https://github.com/thedevyansh/Atlan-Challenge#readme"
+}
