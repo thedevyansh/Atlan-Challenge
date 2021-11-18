@@ -2,9 +2,10 @@
   "name": "atlan-challenge",
   "version": "1.0.0",
   "description": "Challenge stage of the Backend Internship application process at Atlan.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/thedevyansh/Atlan-Challenge/issues"
   },
-  "homepage": "https://github.com/thedevyansh/Atlan-Challenge#readme"
+  "homepage": "https://github.com/thedevyansh/Atlan-Challenge#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^6.0.1",
+    "firebase": "^9.4.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
 }
