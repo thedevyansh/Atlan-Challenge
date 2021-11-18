@@ -1,0 +1,33 @@
+{{#if response}}
+  <div class="alert alert-light" role="alert">
+    <p class="mb-4" style="font-weight: bold;">The following response has been
+      recorded:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Response ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Age</th>
+          <th scope="col">College</th>
+          <th scope="col">Applied for</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{response.responseId}}</td>
+          <td>{{response.name}}</td>
+          <td>{{response.age}}</td>
+          <td>{{response.college}}</td>
+          <td>{{response.role}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container" style="margin-top: 40px;">
+    <p>Adding the response to Google Sheet...</p>
+    <p>Done.</p>
+    <a href="#" class="btn btn-primary" role="button" aria-disabled="true">Go to
+      Google Sheet</a>
+  </div>
+{{/if}}

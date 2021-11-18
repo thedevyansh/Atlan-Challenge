@@ -1,0 +1,54 @@
+<form class="form-signin" method="POST" action="/show-response">
+  <div class="text-center mb-4">
+    <img
+      src="https://collect.atlan.com/assets/img/atlan-collect-blue.svg"
+      alt="Atlan Collect"
+      width="250"
+      height="100"
+    />
+  </div>
+
+  <label for="name">What is your name?</label>
+  <div class="form-label-group mb-4">
+    <input
+      type="text"
+      id="name"
+      name="name"
+      class="form-control"
+      placeholder="Name"
+      required
+    />
+  </div>
+
+  <label for="age">What is your age?</label>
+  <div class="form-label-group mb-4">
+    <input
+      type="number"
+      id="age"
+      name="age"
+      class="form-control"
+      placeholder="Age"
+      required
+    />
+  </div>
+
+  <label for="college">What is your college name?</label>
+  <div class="form-label-group mb-4">
+    <input
+      type="text"
+      id="college"
+      name="college"
+      class="form-control"
+      placeholder="College name"
+      required
+    />
+  </div>
+
+  <label for="role">Which role are you applying for at Atlan?</label>
+  <select class="form-select" id="role" name="role" aria-label="Frontend Intern">
+    <option value="Frontend Intern" selected>Frontend Intern </option>
+    <option value="Backend Intern">Backend Intern</option>
+  </select>
+
+  <input class="btn btn-primary mt-3" type="submit" value="Submit">
+</form>
