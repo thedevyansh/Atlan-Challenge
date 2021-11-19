@@ -2,10 +2,11 @@
   "name": "atlan-challenge",
   "version": "1.0.0",
   "description": "Challenge stage of the Backend Internship application process at Atlan.",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node src/app.js",
+    "dev:main": "nodemon src/app.js",
+    "dev:google-sheet-plugin": "nodemon src/google-sheet-plugin.js"
   },
   "repository": {
     "type": "git",
@@ -18,9 +19,11 @@
   },
   "homepage": "https://github.com/thedevyansh/Atlan-Challenge#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-handlebars": "^6.0.1",
     "firebase": "^9.4.1",
+    "redis": "^3.1.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
