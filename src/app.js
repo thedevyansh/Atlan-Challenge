@@ -28,10 +28,9 @@ app.post('/show-response', async (req, res) => {
   const response = req.body;
   response.responseId = uuidv4();
 
-  addnewDocument(response);
-  // readASingleDocument(doc(firestore, 'Users/kyx5dOmhMMKjZwTTIieJ'));
+  addnewDocument(response, res);
 
-  res.render('showResponse', { response: response });
+  // res.render('showResponse', { response: response });
 });
 
 app.listen(PORT, () => console.log(`Server started running on port ${PORT}.`));

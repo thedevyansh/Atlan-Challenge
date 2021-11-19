@@ -3,7 +3,7 @@ const { getFirestore, getDoc, doc, setDoc } = require('firebase/firestore');
 
 const redis = require('redis');
 
-const publisher = redis.createClient();
+const MainService = redis.createClient();
 
 const firebaseApp = initializeApp({
   apiKey: 'AIzaSyCDXEbmBCX2BkeBUo7oWK7QgOAHlA0lEQ0',
@@ -17,13 +17,17 @@ const firebaseApp = initializeApp({
 
 const firestore = getFirestore();
 
-function addnewDocument(response) {
-  console.log(response)
+function addnewDocument(response, res) {
   const docRef = doc(firestore, `Users/${response.responseId}`);
   setDoc(docRef, response)
-    .then(() => {
-      console.log('THE RESPONSE HAS BEEN WRITTEN TO THE DATABASE!');
-      publisher.publish("response-channel", JSON.stringify(response));
+    .then(async () => {
+      console.log('The response has been added to Firestore.');
+
+      let myResponse = await readASingleDocument(docRef);
+
+      MainService.publish('response-channel', myResponse);
+
+      res.render('showResponse', { response: response });
     })
     .catch((err) => {
       console.log(err);
@@ -33,10 +37,12 @@ function addnewDocument(response) {
 async function readASingleDocument(docName) {
   const mySnapshot = await getDoc(docName);
   if (mySnapshot.exists()) {
-    const docData = mySnapshot.data();
-    console.log(`My data is  ${JSON.stringify(docData)}`);
+    let docData = mySnapshot.data();
+    docData = JSON.stringify(docData);
+    return docData;
   } else {
     console.log('No such document exists.');
+    return null;
   }
 }
 
