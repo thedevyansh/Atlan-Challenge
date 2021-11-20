@@ -1,9 +1,13 @@
 const { initializeApp } = require('firebase/app');
 const { getFirestore, getDoc, doc, setDoc } = require('firebase/firestore');
 
-const redis = require('redis');
+const { PubSub } = require('@google-cloud/pubsub');
+const pubSubClient = new PubSub();
 
-const MainService = redis.createClient();
+const { publishMessage } = require('../repositories/pub-sup-repo');
+
+const topicName = 'responses_topic';
+
 
 const firebaseApp = initializeApp({
   apiKey: 'AIzaSyCDXEbmBCX2BkeBUo7oWK7QgOAHlA0lEQ0',
@@ -24,8 +28,8 @@ function addnewDocument(response, res) {
       console.log('The response has been added to Firestore.');
 
       let myResponse = await readASingleDocument(docRef);
-
-      MainService.publish('response-channel', myResponse);
+  
+      await publishMessage(pubSubClient, topicName, myResponse);
 
       res.render('showResponse', { response: response });
     })

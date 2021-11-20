@@ -1,15 +1,17 @@
-const redis = require('redis');
 const { google } = require('googleapis');
-const keys = require('../keys.json');
+const sheets_api_key = require('../sheet-api-key.json');
+
+const { PubSub } = require('@google-cloud/pubsub');
+const pubSubClient = new PubSub();
+const subscriptionName = 'sheet_sub';
+const timeout = 60;
 
 require('dotenv').config();
 
-const GoogleSheetPlugin = redis.createClient();
-
 const client = new google.auth.JWT(
-  process.env.CLIENT_EMAIL,
+  process.env.SHEETS_CLIENT_EMAIL,
   null,
-  process.env.PRIVATE_KEY.replace(/\\n/gm, '\n'),
+  process.env.SHEETS_PRIVATE_KEY.replace(/\\n/gm, '\n'),
   ['https://www.googleapis.com/auth/spreadsheets']
 );
 
@@ -31,8 +33,11 @@ async function gsrun(client, formattedResponse) {
   await gsapi.spreadsheets.values.append(updateOptions);
 }
 
-GoogleSheetPlugin.on('message', (channel, message) => {
-  message = JSON.parse(message);
+const subscription = pubSubClient.subscription(subscriptionName);
+
+subscription.on('message', (msg) => {
+  message = JSON.parse(msg.data);
+
   const formattedResponse = [
     [
       message.responseId,
@@ -52,6 +57,10 @@ GoogleSheetPlugin.on('message', (channel, message) => {
       gsrun(client, formattedResponse);
     }
   });
+
+  msg.ack();
 });
 
-GoogleSheetPlugin.subscribe('response-channel');
+setTimeout(() => {
+  subscription.removeListener('message', messageHandler);
+}, timeout * 1000);
