@@ -1,13 +1,11 @@
 const express = require('express');
 const { engine } = require('express-handlebars');
 const { v4: uuidv4 } = require('uuid');
-
-const { addnewDocument, readASingleDocument } = require('./firestore/utility');
+const { addNewDocument } = require('./firestore');
 
 require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
@@ -28,7 +26,9 @@ app.post('/show-response', async (req, res) => {
   const response = req.body;
   response.responseId = uuidv4();
 
-  addnewDocument(response, res);
+  addNewDocument(response, res);
 });
 
-app.listen(PORT, () => console.log(`Server started running on port ${PORT}.`));
+app.listen(process.env.MAIN_PORT, () =>
+  console.log(`Central server started running on port ${process.env.MAIN_PORT}.`)
+);

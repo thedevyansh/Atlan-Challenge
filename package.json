@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev:main": "nodemon src/app.js",
-    "dev:google-sheet-plugin": "nodemon src/google-sheet-plugin.js"
+    "dev:sheet-plugin": "nodemon src/google-sheet-plugin.js"
   },
   "repository": {
     "type": "git",

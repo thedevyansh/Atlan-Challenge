@@ -1,42 +1,28 @@
+const express = require('express');
 const { google } = require('googleapis');
-const sheets_api_key = require('../sheet-api-key.json');
-
 const { PubSub } = require('@google-cloud/pubsub');
+
+require('dotenv').config();
+
+const app = express();
+
 const pubSubClient = new PubSub();
 const subscriptionName = 'sheet_sub';
 const timeout = 60;
 
-require('dotenv').config();
+const subscription = pubSubClient.subscription(subscriptionName);
 
-const client = new google.auth.JWT(
+const sheetsClient = new google.auth.JWT(
   process.env.SHEETS_CLIENT_EMAIL,
   null,
   process.env.SHEETS_PRIVATE_KEY.replace(/\\n/gm, '\n'),
   ['https://www.googleapis.com/auth/spreadsheets']
 );
 
-async function gsrun(client, formattedResponse) {
-  const gsapi = google.sheets({
-    version: 'v4',
-    auth: client,
-  });
-
-  const updateOptions = {
-    spreadsheetId: '1J7yd_4iW24iKJmrmUwzlllSgfGu_CIdKvd-GEU7qlXg',
-    range: 'A1',
-    valueInputOption: 'USER_ENTERED',
-    resource: {
-      values: formattedResponse,
-    },
-  };
-
-  await gsapi.spreadsheets.values.append(updateOptions);
-}
-
-const subscription = pubSubClient.subscription(subscriptionName);
-
-subscription.on('message', (msg) => {
+const callbackOnPull = (msg) => {
+  console.log('Message received: ');
   message = JSON.parse(msg.data);
+  console.log(message);
 
   const formattedResponse = [
     [
@@ -48,19 +34,44 @@ subscription.on('message', (msg) => {
     ],
   ];
 
-  client.authorize((err, tokens) => {
+  sheetsClient.authorize((err, tokens) => {
     if (err) {
-      console.log(err);
+      console.error(err);
       return;
     } else {
-      console.log('Connected to Google Sheets.');
-      gsrun(client, formattedResponse);
+      addResponseToSheet(sheetsClient, formattedResponse);
     }
   });
 
   msg.ack();
-});
+};
+
+subscription.on('message', callbackOnPull);
 
 setTimeout(() => {
-  subscription.removeListener('message', messageHandler);
+  subscription.removeListener('message', callbackOnPull);
 }, timeout * 1000);
+
+const addResponseToSheet = async (sheetsClient, response) => {
+  const gsapi = google.sheets({
+    version: 'v4',
+    auth: sheetsClient,
+  });
+
+  const options = {
+    spreadsheetId: '1J7yd_4iW24iKJmrmUwzlllSgfGu_CIdKvd-GEU7qlXg',
+    range: 'A1',
+    valueInputOption: 'USER_ENTERED',
+    resource: {
+      values: response,
+    },
+  };
+
+  await gsapi.spreadsheets.values.append(options);
+};
+
+app.listen(process.env.SHEETS_PORT, () =>
+  console.log(
+    `Sheets server started running on port ${process.env.SHEETS_PORT}.`
+  )
+);

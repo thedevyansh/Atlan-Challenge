@@ -1,13 +1,7 @@
 const { initializeApp } = require('firebase/app');
-const { getFirestore, getDoc, doc, setDoc } = require('firebase/firestore');
-
+const { getFirestore, doc, getDoc, setDoc } = require('firebase/firestore');
 const { PubSub } = require('@google-cloud/pubsub');
-const pubSubClient = new PubSub();
-
-const { publishMessage } = require('../repositories/pub-sup-repo');
-
-const topicName = 'responses_topic';
-
+const { publishMessage } = require('./pub-sup');
 
 const firebaseApp = initializeApp({
   apiKey: 'AIzaSyCDXEbmBCX2BkeBUo7oWK7QgOAHlA0lEQ0',
@@ -20,37 +14,39 @@ const firebaseApp = initializeApp({
 });
 
 const firestore = getFirestore();
+const topicName = 'responses_topic';
+const pubSubClient = new PubSub();
 
-function addnewDocument(response, res) {
-  const docRef = doc(firestore, `Users/${response.responseId}`);
-  setDoc(docRef, response)
+const addNewDocument = (response, res) => {
+  const docReference = doc(firestore, `Users/${response.responseId}`);
+
+  setDoc(docReference, response)
     .then(async () => {
-      console.log('The response has been added to Firestore.');
+      let myResponse = await readDocument(docReference);
 
-      let myResponse = await readASingleDocument(docRef);
-  
-      await publishMessage(pubSubClient, topicName, myResponse);
+      if (myResponse !== null)
+        await publishMessage(pubSubClient, topicName, myResponse);
 
       res.render('showResponse', { response: response });
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
-}
+};
 
-async function readASingleDocument(docName) {
+const readDocument = async (docName) => {
   const mySnapshot = await getDoc(docName);
+
   if (mySnapshot.exists()) {
     let docData = mySnapshot.data();
     docData = JSON.stringify(docData);
     return docData;
   } else {
-    console.log('No such document exists.');
     return null;
   }
-}
+};
 
 module.exports = {
-  addnewDocument,
-  readASingleDocument,
+  addNewDocument,
+  readDocument,
 };
