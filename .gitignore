@@ -1,3 +1,4 @@
 node_modules
-keys.json
+sheet-api-key.json
+pub-sub-key.json
 .env
