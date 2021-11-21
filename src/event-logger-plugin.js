@@ -12,7 +12,7 @@ const logger = new EventLogger();
 const subscriptionResponses = pubSubClient.subscription(subscriptionName);
 
 const handleEvent = (msg) => {
-    logger.info(`Message [${msg.id}] received.`, {success: true});
+  logger.info(`Message [${msg.id}] received.`, { success: true });
 };
 
 subscriptionResponses.on('message', handleEvent);

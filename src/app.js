@@ -30,5 +30,7 @@ app.post('/show-response', async (req, res) => {
 });
 
 app.listen(process.env.MAIN_PORT, () =>
-  console.log(`Central server started running on port ${process.env.MAIN_PORT}.`)
+  console.log(
+    `Central server started running on port ${process.env.MAIN_PORT}.`
+  )
 );
