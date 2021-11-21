@@ -20,19 +20,11 @@ const sheetsClient = new google.auth.JWT(
 );
 
 const callbackOnPull = (msg) => {
-  console.log('Message received: ');
+  console.log(`Message [${msg.id}] received: `);
   message = JSON.parse(msg.data);
   console.log(message);
 
-  const formattedResponse = [
-    [
-      message.responseId,
-      message.name,
-      message.age,
-      message.college,
-      message.role,
-    ],
-  ];
+  const formattedResponse = [[ message.responseId, message.name, message.age, message.college, message.role]];
 
   sheetsClient.authorize((err, tokens) => {
     if (err) {
