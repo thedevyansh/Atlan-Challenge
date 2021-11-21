@@ -1,7 +1,7 @@
 const { initializeApp } = require('firebase/app');
 const { getFirestore, doc, getDoc, setDoc } = require('firebase/firestore');
 const { PubSub } = require('@google-cloud/pubsub');
-const { publishMessage } = require('./publisher');
+const { publishMessage } = require('../publisher/publisher');
 
 const firebaseApp = initializeApp({
   apiKey: 'AIzaSyCDXEbmBCX2BkeBUo7oWK7QgOAHlA0lEQ0',

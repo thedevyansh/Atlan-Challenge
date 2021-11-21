@@ -1,7 +1,7 @@
 const express = require('express');
 const { engine } = require('express-handlebars');
 const { v4: uuidv4 } = require('uuid');
-const { addNewDocument } = require('./firestore');
+const { addNewDocument } = require('./firebase/firestore');
 
 require('dotenv').config();
 

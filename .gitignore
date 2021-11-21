@@ -1,5 +1,4 @@
 node_modules
-sheet-api-key.json
 pub-sub-key.json
 .env
 logs

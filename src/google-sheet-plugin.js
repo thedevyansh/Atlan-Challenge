@@ -8,7 +8,7 @@ const app = express();
 
 const pubSubClient = new PubSub();
 const subscriptionName = 'sheet_sub';
-const timeout = 60;
+const timeout = 300;
 
 const subscription = pubSubClient.subscription(subscriptionName);
 

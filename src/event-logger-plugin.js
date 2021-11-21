@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const pubSubClient = new PubSub();
 const subscriptionName = 'logger-for-responses-sub';
-const timeout = 60;
+const timeout = 300;
 
 const logger = new EventLogger();
 
