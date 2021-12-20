@@ -13,6 +13,7 @@ const subscriptionResponses = pubSubClient.subscription(subscriptionName);
 
 const handleEvent = (msg) => {
   logger.info(`Message [${msg.id}] received.`, { success: true });
+  msg.ack();
 };
 
 subscriptionResponses.on('message', handleEvent);
