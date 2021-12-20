@@ -1,16 +1,16 @@
 # Atlan-Challenge
 
-**Backend Challenge - Design Specification**
+### Backend Challenge - Design Specification
 
 The Atlan Backend Challenge is to design an **ecosystem for integrations** where each use case can be plugged-in without an overhaul on the backend.
 
-**Solution**
+### Solution
 
 I've leveraged the **Pub/Sub event-driven architecture** approach for the solution. The problem statement requires us to create a system that facilitates eventual consistency, fail-safety, high availability, and scalability.
 
 The **Cloud Pub/Sub** by Google that I’ve used in my solution guarantees all of these characteristics. If one of the subscribers/services goes down, the message is retained in the Topic so that once the service is up and running again, the message is delivered to it. This ensures eventual consistency and fail-safely. Also, multiple instances of a service may be deployed and subscribed to a common topic, so if the service fails in any zone, the others can pick up the load automatically. This ensures high availability and reliability.
 
-**Tech stack**
+### Tech stack
 
 - Node.js, Express, and Handlebars
 - Cloud Pub/Sub
@@ -55,7 +55,7 @@ When the Google Sheets service has started:
 
 ![](snapshots/Aspose.Words.3ad4ba3b-d083-4564-90bd-d1bd6b22ac5d.005.png)
 
-**Database Schema**
+### Database Schema
 
 I propose the following **database schema** for storing forms (with questions) and responses (with answers) in the Collect datastore.
 
@@ -71,16 +71,14 @@ This normalized schema makes the database more flexible by eliminating redundanc
 
 ![](snapshots/Aspose.Words.3ad4ba3b-d083-4564-90bd-d1bd6b22ac5d.007.jpeg)
 
-*Database Schema*
-
-**Benchmarking**
+### Benchmarking
 
 Pub/Sub Messaging is based on publishers publishing messages and subscribers subscribing to those messages. Thus, it makes sense to **benchmark the system based on publisher and subscriber throughput.**
 
 - **Thread parallelism** can be used to process multiple messages on different cores of the CPU. Since a higher number of generated events can be processed with increased CPU cores, the publisher throughput should increase. Therefore, employing parallelism is an effective strategy to benchmark publisher and subscriber throughput.
 - We can publish batches of messages (e.g., 1000 messages or 5 MB per batch). However, large batch settings may increase per-message latency.
 
-**Logging**
+### Logging
 
 Logs are the events that occur during the execution of an application. These events can be errors, warnings, performance metrics, etc.
 
@@ -101,7 +99,7 @@ The implementation of event logging can be found insrc/logger/event-logger.js an
 
 ![](snapshots/Aspose.Words.3ad4ba3b-d083-4564-90bd-d1bd6b22ac5d.009.png)
 
-**Health monitoring**
+### Health monitoring
 
 Based on the Pub/Sub model, I have come up with the following ideas to monitor the system's health.
 
@@ -124,7 +122,7 @@ There are some limitations on the usage of Sheets API, which can hinder the perf
 - It can only be increased to 2500 requests per account even with the paid quota.
 - If the Sheets API is down, it means the Google Sheets Plugin cannot function. Even when the service is up, the number of spreadsheets that can be created depends on the membership plan of the Google account. Free Google Accounts give 15 GB of storage.
 
-**Screenshots of the prototype**
+### Screenshots of the prototype
 
 ![](snapshots/Aspose.Words.3ad4ba3b-d083-4564-90bd-d1bd6b22ac5d.011.jpeg)
 
